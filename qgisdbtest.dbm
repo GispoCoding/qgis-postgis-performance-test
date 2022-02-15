@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+CAUTION: Do not modify this file unless you know what you are doing.
+ Unexpected results may occur if the code is changed deliberately.
+-->
+<dbmodel pgmodeler-ver="0.9.4" use-changelog="false" last-position="0,276" last-zoom="0.65" max-obj-count="8"
+	 default-schema="qgisdbtest" default-owner="postgres"
+	 layers="Default layer"
+	 active-layers="0"
+	 layer-name-colors="#000000"
+	 layer-rect-colors="#b4b4b4"
+	 show-layer-names="false" show-layer-rects="false">
+<database name="qgisdbtest" is-template="false" allow-conns="true" sql-disabled="true">
+</database>
+
+<schema name="public" layers="0" fill-color="#e1e1e1" sql-disabled="true">
+</schema>
+
+<schema name="qgisdbtest" layers="0" rect-visible="true" fill-color="#e1e1e1">
+	<role name="postgres"/>
+</schema>
+
+<extension name="postgis">
+	<schema name="public"/>
+</extension>
+
+<table name="land_parcel" layers="0" collapse-mode="2" max-obj-count="4" z-value="0">
+	<schema name="qgisdbtest"/>
+	<role name="postgres"/>
+	<position x="920" y="540"/>
+	<column name="id" not-null="true"
+	 identity-type="BY DEFAULT">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="name" not-null="true">
+		<type name="text" length="0"/>
+	</column>
+	<column name="geom" not-null="true">
+		<type name="geometry" length="0" spatial-type="POLYGON" variation="0" srid="3857"/>
+	</column>
+	<constraint name="parcel_pk" type="pk-constr" table="qgisdbtest.land_parcel">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+
+	<customidxs object-type="column">
+		<object name="parcel_type_id" index="1"/>
+	</customidxs>
+
+	<customidxs object-type="constraint">
+		<object name="parcel_type_fk" index="1"/>
+	</customidxs>
+</table>
+
+<table name="parcel_type" layers="0" collapse-mode="2" max-obj-count="2" z-value="0">
+	<schema name="qgisdbtest"/>
+	<role name="postgres"/>
+	<position x="400" y="580"/>
+	<column name="id" not-null="true"
+	 identity-type="BY DEFAULT">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="definition" not-null="true">
+		<type name="text" length="0"/>
+	</column>
+	<constraint name="parcel_types_pk" type="pk-constr" table="qgisdbtest.parcel_type">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<relationship name="parcel_types_has_many_parcels" type="rel1n" layers="0"
+	 src-col-pattern="{st}_{sc}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#f7cad5"
+	 src-table="qgisdbtest.parcel_type"
+	 dst-table="qgisdbtest.land_parcel"
+	 src-required="true" dst-required="false"
+	upd-action="CASCADE"
+	del-action="CASCADE"/>
+
+<table name="building" layers="0" collapse-mode="2" max-obj-count="7" z-value="0">
+	<schema name="qgisdbtest"/>
+	<role name="postgres"/>
+	<position x="920" y="880"/>
+	<column name="id" not-null="true"
+	 identity-type="BY DEFAULT">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="name" not-null="true">
+		<type name="text" length="0"/>
+	</column>
+	<column name="building_year">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="geom" not-null="true">
+		<type name="geometry" length="0" spatial-type="POINT" variation="0" srid="3857"/>
+	</column>
+	<constraint name="building_pk" type="pk-constr" table="qgisdbtest.building">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+
+	<customidxs object-type="column">
+		<object name="building_type_id" index="2"/>
+		<object name="land_parcel_id" index="1"/>
+	</customidxs>
+
+	<customidxs object-type="constraint">
+		<object name="building_type_fk" index="1"/>
+		<object name="land_parcel_fk" index="2"/>
+	</customidxs>
+</table>
+
+<table name="building_type" layers="0" collapse-mode="2" max-obj-count="2" z-value="0">
+	<schema name="qgisdbtest"/>
+	<role name="postgres"/>
+	<position x="400" y="940"/>
+	<column name="id" not-null="true"
+	 identity-type="BY DEFAULT">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="definition" not-null="true">
+		<type name="text" length="0"/>
+	</column>
+	<constraint name="building_type_pk" type="pk-constr" table="qgisdbtest.building_type">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<relationship name="building_types_has_many_buildings" type="rel1n" layers="0"
+	 src-col-pattern="{st}_{sc}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#f4d725"
+	 src-table="qgisdbtest.building_type"
+	 dst-table="qgisdbtest.building"
+	 src-required="true" dst-required="false"
+	upd-action="CASCADE"
+	del-action="CASCADE"/>
+
+<relationship name="parcels_has_many_buildings" type="rel1n" layers="0"
+	 src-col-pattern="{st}_{sc}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#8d375c"
+	 src-table="qgisdbtest.land_parcel"
+	 dst-table="qgisdbtest.building"
+	 src-required="true" dst-required="false"
+	upd-action="CASCADE"
+	del-action="CASCADE"/>
+
+<table name="contact" layers="0" collapse-mode="2" max-obj-count="2" z-value="0">
+	<schema name="qgisdbtest"/>
+	<role name="postgres"/>
+	<position x="960" y="1360"/>
+	<column name="id" not-null="true"
+	 identity-type="BY DEFAULT">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="name" not-null="true">
+		<type name="text" length="0"/>
+	</column>
+	<constraint name="contact_pk" type="pk-constr" table="qgisdbtest.contact">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<relationship name="many_contacts_has_many_buildings" type="relnn" layers="0"
+	 src-col-pattern="{sc}_{st}" dst-col-pattern="{sc}_{dt}"
+	 pk-pattern="{gt}_pk" uq-pattern="{gt}_uq"
+	 src-fk-pattern="{st}_fk" dst-fk-pattern="{dt}_fk"
+	 pk-col-pattern="id"
+	 custom-color="#0e9d4d"
+	 src-table="qgisdbtest.contact"
+	 dst-table="qgisdbtest.building"
+	 src-required="false" dst-required="false"
+	 table-name="building_owners"
+	upd-action="CASCADE"
+	del-action="CASCADE"/>
+
+<index name="uidx_parcels_parcel_id" table="qgisdbtest.land_parcel"
+	 concurrent="false" unique="true" fast-update="false" buffering="false"
+	 index-type="btree" factor="0">
+		<idxelement use-sorting="false">
+			<column name="name"/>
+		</idxelement>
+</index>
+
+<index name="uidx_buildings_building_id" table="qgisdbtest.building"
+	 concurrent="false" unique="true" fast-update="false" buffering="false"
+	 index-type="btree" factor="0">
+		<idxelement use-sorting="false">
+			<column name="name"/>
+		</idxelement>
+</index>
+
+<index name="idx_buildings_parcels_id" table="qgisdbtest.building"
+	 concurrent="false" unique="false" fast-update="false" buffering="false"
+	 index-type="btree" factor="0">
+		<idxelement use-sorting="false">
+			<column name="land_parcel_id"/>
+		</idxelement>
+</index>
+
+<index name="uidx_contact_name" table="qgisdbtest.contact"
+	 concurrent="false" unique="true" fast-update="false" buffering="false"
+	 index-type="btree" factor="0">
+		<idxelement use-sorting="false">
+			<column name="name"/>
+		</idxelement>
+</index>
+
+<table name="parcel_notes" layers="0" collapse-mode="2" max-obj-count="3" z-value="0">
+	<schema name="qgisdbtest"/>
+	<role name="postgres"/>
+	<position x="1520" y="560"/>
+	<column name="id" not-null="true"
+	 identity-type="BY DEFAULT">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="text" not-null="true">
+		<type name="text" length="0"/>
+	</column>
+	<constraint name="parcel_notes_pk" type="pk-constr" table="qgisdbtest.parcel_notes">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+
+	<customidxs object-type="column">
+		<object name="land_parcel_id" index="2"/>
+	</customidxs>
+
+	<customidxs object-type="constraint">
+		<object name="land_parcel_fk" index="1"/>
+	</customidxs>
+</table>
+
+<table name="building_notes" layers="0" collapse-mode="2" max-obj-count="3" z-value="0">
+	<schema name="qgisdbtest"/>
+	<role name="postgres"/>
+	<position x="1520" y="940"/>
+	<column name="id" not-null="true"
+	 identity-type="BY DEFAULT">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="text" not-null="true">
+		<type name="text" length="0"/>
+	</column>
+	<constraint name="building_notes_pk" type="pk-constr" table="qgisdbtest.building_notes">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+
+	<customidxs object-type="column">
+		<object name="building_id" index="2"/>
+	</customidxs>
+
+	<customidxs object-type="constraint">
+		<object name="building_fk" index="1"/>
+	</customidxs>
+</table>
+
+<relationship name="land_parcel_has_many_parcel_notes" type="rel1n" layers="0"
+	 src-col-pattern="{st}_{sc}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#7a6771"
+	 src-table="qgisdbtest.land_parcel"
+	 dst-table="qgisdbtest.parcel_notes"
+	 src-required="true" dst-required="false"
+	upd-action="CASCADE"
+	del-action="CASCADE"/>
+
+<relationship name="building_has_many_building_notes" type="rel1n" layers="0"
+	 src-col-pattern="{st}_{sc}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#3bd871"
+	 src-table="qgisdbtest.building"
+	 dst-table="qgisdbtest.building_notes"
+	 src-required="true" dst-required="false"
+	upd-action="CASCADE"
+	del-action="CASCADE"/>
+
+<index name="idx_building_notes_building_id" table="qgisdbtest.building_notes"
+	 concurrent="false" unique="false" fast-update="false" buffering="false"
+	 index-type="btree" factor="0">
+		<idxelement use-sorting="false">
+			<column name="building_id"/>
+		</idxelement>
+</index>
+
+<index name="idx_parcel_notes_land_parcel_id" table="qgisdbtest.parcel_notes"
+	 concurrent="false" unique="false" fast-update="false" buffering="false"
+	 index-type="btree" factor="0">
+		<idxelement use-sorting="false">
+			<column name="land_parcel_id"/>
+		</idxelement>
+</index>
+
+</dbmodel>
