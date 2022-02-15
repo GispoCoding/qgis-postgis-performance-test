@@ -36,6 +36,7 @@ SELECT postgis_version()
 SELECT postgis_version()
 ```
 
+For total **QGIS generates 72 SELECT queries** to the database when opening a feature form in this project.
 
 ## Sample data
 
