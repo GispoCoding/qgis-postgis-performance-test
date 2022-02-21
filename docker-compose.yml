@@ -1,0 +1,24 @@
+
+# docker-compose build
+version: '2.1'
+services:
+
+  db:
+    image: kartoza/postgis:13-3
+    volumes:
+      - ./qgisdbtest.sql:/docker-entrypoint-initdb.d/1_setup_db.sql
+      - ./insert_data.sql:/docker-entrypoint-initdb.d/2_insert_data.sql
+      - ./data_generator.sql:/docker-entrypoint-initdb.d/3_data_generator.sql
+    environment:
+      # If you need to create multiple database you can add coma separated databases eg gis,data
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASS=postgres
+      - ALLOW_IP_RANGE=0.0.0.0/0
+      # Add extensions you need to be enabled by default in the DB. Default are the five specified below
+      - POSTGRES_MULTIPLE_EXTENSIONS=postgis,postgis_topology
+    ports:
+      - 5432:5432
+    restart: on-failure
+    healthcheck:
+      test: "exit 0"
