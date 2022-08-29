@@ -6,30 +6,35 @@ This repository provides a sample data to reproduce performance issues with QGIS
 
 With a complex database data model and with complex QGIS forms containing many relationships interacting with the forms is frustratingly slow.
 
-QGIS makes many duplicate SQL queries to the database which could cause at least some of the slowness.
+### Logs
 
-## Reproduce the issue
+In the [logs folder](logs) there are logs from PostgreSQL and QGIS Query Logger from the time frame where:
+1. Project is opened
+2. Lot 5 is clicked with info tool to open the feature form
+3. The form is closed
 
-1. Configure Postgresql as in [pg.conf](pg.conf) to log all statements.
-2. Create a db named "qgisdbtest"
-3. Create schema `psql -f qgisdbtest.sql`
-4. Insert data `psql -f insert_data.sql`
-5. Open the qgis-project and open a form of some land parcel
-6. Inspect the PostgreSQL logs
 
-It can be seen from the [logs](logs/open%20form%20lot5.log) that QGIS generates many duplicate queries. For example 
+It can be seen from the [PostgreSQL logs](logs/pg_logs-open_project-open_lot5_form-close-form.log) that QGIS generates many duplicate heavy load queries without where clause. For example 
 ```sql
-BEGIN READ ONLY;DECLARE qgis_138 BINARY CURSOR FOR SELECT "id","name"::text FROM "qgisdbtest"."land_parcel"
-FETCH FORWARD 2000 FROM qgis_138
-CLOSE qgis_138;COMMIT
-BEGIN READ ONLY;DECLARE qgis_140 BINARY CURSOR FOR SELECT "id","name"::text FROM "qgisdbtest"."land_parcel"
-FETCH FORWARD 2000 FROM qgis_140
-CLOSE qgis_140;COMMIT
-BEGIN READ ONLY;DECLARE qgis_142 BINARY CURSOR FOR SELECT "id","name"::text FROM "qgisdbtest"."land_parcel"
-FETCH FORWARD 2000 FROM qgis_142
-CLOSE qgis_142;COMMIT
+-- LINE 274
+BEGIN READ ONLY;DECLARE qgis_26 BINARY CURSOR FOR SELECT "id","name"::text FROM "qgisdbtest"."land_parcel"
+FETCH FORWARD 2000 FROM qgis_26
+CLOSE qgis_26;COMMIT
+
+-- LINE 280
+BEGIN READ ONLY;DECLARE qgis_28 BINARY CURSOR FOR SELECT "id","name"::text FROM "qgisdbtest"."land_parcel"
+FETCH FORWARD 2000 FROM qgis_28
+CLOSE qgis_28;COMMIT
+
+-- LINE 286
+BEGIN READ ONLY;DECLARE qgis_30 BINARY CURSOR FOR SELECT "id","name"::text FROM "qgisdbtest"."land_parcel"
+FETCH FORWARD 2000 FROM qgis_30
+CLOSE qgis_30;COMMIT
 ```
 
+For total **QGIS generates 72 SELECT queries** to the database when opening a feature form of any land parcel in this project.
+
+Also there can be found other duplicate queries. For example:
 ```sql
 SELECT postgis_version()
 SELECT postgis_version()
