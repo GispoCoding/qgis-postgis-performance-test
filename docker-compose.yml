@@ -11,7 +11,7 @@ services:
       - ./data/data_generator.sql:/docker-entrypoint-initdb.d/3_data_generator.sql
     environment:
       # If you need to create multiple database you can add coma separated databases eg gis,data
-      - POSTGRES_DB=postgres
+      - POSTGRES_DB=postgres,qgisdbtest
       - POSTGRES_USER=postgres
       - POSTGRES_PASS=postgres
       - ALLOW_IP_RANGE=0.0.0.0/0
