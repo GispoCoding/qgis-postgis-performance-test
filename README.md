@@ -36,15 +36,13 @@ SELECT postgis_version()
 SELECT postgis_version()
 ```
 
-For total **QGIS generates 72 SELECT queries** to the database when opening a feature form in this project.
-
 ## Sample data
 
-### Datamodel
-![datamodel](datamodel.png)
+### Data model
+![datamodel](docs/datamodel.png)
 
 ### Overview
-![overview of the data](screenshot.png)
+![overview of the data](docs/screenshot.png)
 
 ### QGIS Forms
-![QGIS form](qgisform.png)
+![QGIS form](docs/qgisform.png)
