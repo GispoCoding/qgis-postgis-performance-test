@@ -8,7 +8,6 @@ services:
     volumes:
       - ./data/create_tables.sql:/docker-entrypoint-initdb.d/1_create_tables.sql
       - ./data/insert_sample_data.sql:/docker-entrypoint-initdb.d/2_insert_sample_data.sql
-      - ./data/data_generator.sql:/docker-entrypoint-initdb.d/3_data_generator.sql
     environment:
       # If you need to create multiple database you can add coma separated databases eg gis,data
       - POSTGRES_DB=postgres,qgisdbtest
