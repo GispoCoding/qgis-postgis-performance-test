@@ -3,7 +3,7 @@
 CAUTION: Do not modify this file unless you know what you are doing.
  Unexpected results may occur if the code is changed deliberately.
 -->
-<dbmodel pgmodeler-ver="0.9.4" use-changelog="false" last-position="0,276" last-zoom="0.65" max-obj-count="8"
+<dbmodel pgmodeler-ver="0.9.4" use-changelog="false" last-position="0,258" last-zoom="0.65" max-obj-count="8"
 	 default-schema="qgisdbtest" default-owner="postgres"
 	 layers="Default layer"
 	 active-layers="0"
@@ -20,7 +20,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<role name="postgres"/>
 </schema>
 
-<extension name="postgis">
+<extension name="postgis" sql-disabled="true">
 	<schema name="public"/>
 </extension>
 
@@ -177,22 +177,6 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	upd-action="CASCADE"
 	del-action="CASCADE"/>
 
-<index name="uidx_parcels_parcel_id" table="qgisdbtest.land_parcel"
-	 concurrent="false" unique="true" fast-update="false" buffering="false"
-	 index-type="btree" factor="0">
-		<idxelement use-sorting="false">
-			<column name="name"/>
-		</idxelement>
-</index>
-
-<index name="uidx_buildings_building_id" table="qgisdbtest.building"
-	 concurrent="false" unique="true" fast-update="false" buffering="false"
-	 index-type="btree" factor="0">
-		<idxelement use-sorting="false">
-			<column name="name"/>
-		</idxelement>
-</index>
-
 <index name="idx_buildings_parcels_id" table="qgisdbtest.building"
 	 concurrent="false" unique="false" fast-update="false" buffering="false"
 	 index-type="btree" factor="0">
@@ -292,6 +276,38 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	 index-type="btree" factor="0">
 		<idxelement use-sorting="false">
 			<column name="land_parcel_id"/>
+		</idxelement>
+</index>
+
+<index name="idx_buildings_building_type_id" table="qgisdbtest.building"
+	 concurrent="false" unique="false" fast-update="false" buffering="false"
+	 index-type="btree" factor="0">
+		<idxelement use-sorting="false">
+			<column name="building_type_id"/>
+		</idxelement>
+</index>
+
+<index name="idx_buildings_geom" table="qgisdbtest.building"
+	 concurrent="false" unique="false" fast-update="false" buffering="false"
+	 index-type="gist" factor="0">
+		<idxelement use-sorting="false">
+			<column name="geom"/>
+		</idxelement>
+</index>
+
+<index name="idx_land_parcel_pacrel_type_id" table="qgisdbtest.land_parcel"
+	 concurrent="false" unique="false" fast-update="false" buffering="false"
+	 index-type="btree" factor="0">
+		<idxelement use-sorting="false">
+			<column name="parcel_type_id"/>
+		</idxelement>
+</index>
+
+<index name="idx_land_parcel_geom" table="qgisdbtest.land_parcel"
+	 concurrent="false" unique="false" fast-update="false" buffering="false"
+	 index-type="gist" factor="0">
+		<idxelement use-sorting="false">
+			<column name="geom"/>
 		</idxelement>
 </index>
 

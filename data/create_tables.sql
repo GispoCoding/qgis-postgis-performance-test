@@ -134,24 +134,6 @@ REFERENCES qgisdbtest.building (id) MATCH FULL
 ON DELETE CASCADE ON UPDATE CASCADE;
 -- ddl-end --
 
--- object: uidx_parcels_parcel_id | type: INDEX --
--- DROP INDEX IF EXISTS qgisdbtest.uidx_parcels_parcel_id CASCADE;
-CREATE UNIQUE INDEX uidx_parcels_parcel_id ON qgisdbtest.land_parcel
-USING btree
-(
-	name
-);
--- ddl-end --
-
--- object: uidx_buildings_building_id | type: INDEX --
--- DROP INDEX IF EXISTS qgisdbtest.uidx_buildings_building_id CASCADE;
-CREATE UNIQUE INDEX uidx_buildings_building_id ON qgisdbtest.building
-USING btree
-(
-	name
-);
--- ddl-end --
-
 -- object: idx_buildings_parcels_id | type: INDEX --
 -- DROP INDEX IF EXISTS qgisdbtest.idx_buildings_parcels_id CASCADE;
 CREATE INDEX idx_buildings_parcels_id ON qgisdbtest.building
@@ -223,6 +205,42 @@ CREATE INDEX idx_parcel_notes_land_parcel_id ON qgisdbtest.parcel_notes
 USING btree
 (
 	land_parcel_id
+);
+-- ddl-end --
+
+-- object: idx_buildings_building_type_id | type: INDEX --
+-- DROP INDEX IF EXISTS qgisdbtest.idx_buildings_building_type_id CASCADE;
+CREATE INDEX idx_buildings_building_type_id ON qgisdbtest.building
+USING btree
+(
+	building_type_id
+);
+-- ddl-end --
+
+-- object: idx_buildings_geom | type: INDEX --
+-- DROP INDEX IF EXISTS qgisdbtest.idx_buildings_geom CASCADE;
+CREATE INDEX idx_buildings_geom ON qgisdbtest.building
+USING gist
+(
+	geom
+);
+-- ddl-end --
+
+-- object: idx_land_parcel_pacrel_type_id | type: INDEX --
+-- DROP INDEX IF EXISTS qgisdbtest.idx_land_parcel_pacrel_type_id CASCADE;
+CREATE INDEX idx_land_parcel_pacrel_type_id ON qgisdbtest.land_parcel
+USING btree
+(
+	parcel_type_id
+);
+-- ddl-end --
+
+-- object: idx_land_parcel_geom | type: INDEX --
+-- DROP INDEX IF EXISTS qgisdbtest.idx_land_parcel_geom CASCADE;
+CREATE INDEX idx_land_parcel_geom ON qgisdbtest.land_parcel
+USING gist
+(
+	geom
 );
 -- ddl-end --
 
